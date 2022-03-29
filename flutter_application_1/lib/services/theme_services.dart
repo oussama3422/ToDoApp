@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ThemeServices {
@@ -6,17 +7,20 @@ class ThemeServices {
   final _key = 'checkModeTheme';
 
   bool _loadThemeFromBox() {
-    return false;
+    return _box.read<bool>(_key) ?? false;
   }
 
-  bool _saveThemeToBox() {
-    
-    return false;
+  _saveThemeToBox(bool isDarkMode) {
+    _box.write(_key, isDarkMode);
   }
 
   ThemeMode get theme {
     return _loadThemeFromBox() ? ThemeMode.dark : ThemeMode.light;
   }
 
-  void switchTheme() {}
+  void switchTheme() {
+    Get.changeThemeMode(
+        _loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
+    _saveThemeToBox(!_loadThemeFromBox());
+  }
 }

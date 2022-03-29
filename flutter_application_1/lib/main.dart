@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:todo/UI/pages/notification_screen.dart';
 import 'package:get/get.dart';
 import 'package:todo/UI/theme.dart';
+import 'package:todo/services/theme_services.dart';
+
+import 'UI/pages/home_page.dart';
 // import 'ui/pages/home_page.dart';
 
 void main() {
@@ -16,10 +19,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme:Themes.light,
       darkTheme: Themes.dark,
-      themeMode: ThemeMode.light,
+      themeMode: ThemeServices().theme,
       title: 'To Do App',
       debugShowCheckedModeBanner: false,
-      home: const NotificationScreen(payload: 'Oussama;It time to Leave;You Have to check is which one do you want;12:31'),
+      // home: const NotificationScreen(payload: 'Oussama;It time to Leave;You Have to check is which one do you want;12:31'),
+      home: HomePage(),
     );
   }
 }
