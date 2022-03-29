@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:todo/UI/pages/notification_screen.dart';
+import 'package:get/get.dart';
 import 'ui/pages/home_page.dart';
 
 void main() {
@@ -11,10 +12,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.teal,
+        backgroundColor: Colors.teal,
+      ),
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const NotificationScreen(payload: 'oussama;oussama;You Have New Reminder'),
     );
   }
 }
