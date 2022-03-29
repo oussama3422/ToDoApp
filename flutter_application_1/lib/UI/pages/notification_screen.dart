@@ -30,7 +30,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
-        title: Text(_payload.split(';')[1],style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black),),
+        title: Text('Reminder',style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black),),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -55,7 +55,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                    Text(
-                   'Hi,${ _payload.split(';')[1]}',
+                   'Hi,${ _payload.split(';')[0]}',
                     style: TextStyle(fontSize: 30,color: Get.isDarkMode?Colors.white:Colors.black,fontWeight: FontWeight.w900),
                     ),
                   const SizedBox(height: 10,),
@@ -64,7 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     style: TextStyle(fontSize: 20,color: Get.isDarkMode?Colors.white:Colors.black,fontWeight: FontWeight.w900),
                     ),
                 ],
-                ) ,
+                ),
                 
                 ),
             
@@ -88,18 +88,43 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         children: [
                            const Icon(Icons.text_format),
                            const SizedBox(width:8),
-                           Text('Title',style:TextStyle(color:Get.isDarkMode?Colors.white:Colors.black,fontSize:30))
+                           Text('Title : ',style:TextStyle(color:Get.isDarkMode?Colors.white:Colors.black,fontSize:30,fontWeight: FontWeight.w900))
                         ],
-                      )
-                    // Text(
-                    //   _payload.split(';')[1],
-                    //   style: TextStyle(fontSize: 30,color: Get.isDarkMode?Colors.white:Colors.black,fontWeight: FontWeight.w900),
-                    //   ),
-                    // const SizedBox(height: 10,),
-                    // Text(
-                    //   _payload.split(';')[2],
-                    //   style: TextStyle(fontSize: 30,color: Get.isDarkMode?Colors.white:Colors.black,fontWeight: FontWeight.w900),
-                    //   ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                      _payload.split(';')[1],
+                      style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black,fontSize: 13),
+                       ),
+                      const SizedBox(height:40),
+                      Row(
+                        children: [
+                           const Icon(Icons.description),
+                           const SizedBox(width:8),
+                           Text('Description : ',style:TextStyle(color:Get.isDarkMode?Colors.white:Colors.black,fontSize:30,fontWeight: FontWeight.w900))
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                     Text(
+                      _payload.split(';')[2],
+                      style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black,fontSize: 13 ),
+                      textAlign: TextAlign.justify,
+                      ),
+                     const SizedBox(height:40),
+                     Row(
+                        children: [
+                           const Icon(Icons.calendar_today),
+                           const SizedBox(width:8),
+                           Text('Date : ',style:TextStyle(color:Get.isDarkMode?Colors.white:Colors.black,fontSize:30,fontWeight: FontWeight.w900))
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                     Text(
+                      _payload.split(';')[3],
+                      style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black,fontSize: 13 ),
+                      textAlign: TextAlign.justify,
+                      ),
+                      
                     ],
                   ),
                 ),
