@@ -41,11 +41,11 @@ class InputField extends StatelessWidget {
               Expanded(child: TextFormField(
                 controller: controller,
                 autofocus: false,
-                style: suubTitleStyle,
+                style: subheadingStyle,
                 cursorColor: Get.isDarkMode?Colors.grey[100]:Colors.grey[200],
                 decoration: InputDecoration(
                   hintText: hint,
-                  hintStyle: body2Style,
+                  hintStyle: suubTitleStyle,
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).backgroundColor,width: 0)),
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).backgroundColor,width: 0)),
                   ),
