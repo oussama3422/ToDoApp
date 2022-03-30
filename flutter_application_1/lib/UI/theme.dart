@@ -24,6 +24,8 @@ class Themes {
 
  
 
+}
+
   
   TextStyle get headingStyle {
     return GoogleFonts.lato(
@@ -73,4 +75,3 @@ class Themes {
       color: Get.isDarkMode ? Colors.grey[200] : Colors.black,
     ));
   }
-}
