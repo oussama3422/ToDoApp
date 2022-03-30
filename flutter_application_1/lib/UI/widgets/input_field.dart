@@ -21,7 +21,7 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 13),
+      margin: const EdgeInsets.all(15),
       child:Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: 
@@ -46,8 +46,8 @@ class InputField extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: hint,
                   hintStyle: suubTitleStyle,
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).backgroundColor,width: 0)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).backgroundColor,width: 0)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color:  Colors.black)),
                   ),
                 
               )),
