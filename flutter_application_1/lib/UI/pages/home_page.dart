@@ -24,11 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _noteController = TextEditingController();
 
-  DateTime _selectedTime = DateTime.now();
-  String _startTime = DateFormat('hh:mm:a').format(DateTime.now()).toString();
 
   @override
   Widget build(BuildContext context) {
@@ -37,49 +33,14 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
         ),
-        body: Container(
+        body: Container( 
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const InputField(
-                  title: 'Title',
-                  hint: 'enter you name ',
-                ),
-                SizedBox(height: 10),
-                const InputField(
-                  title: 'Note',
-                  hint: 'enter youre Note That You want to Save it. ',
-                ),
-                const SizedBox(height: 10),
-                InputField(
-                  title: 'Date',
-                  hint: DateFormat('hh:mm:a').format(DateTime.now()).toString(),
-                  widget: IconButton(
-                    icon: Icon(Icons.calendar_month_sharp,
-                        size: 30,
-                        color: Get.isDarkMode ? Colors.white : Colors.black),
-                    onPressed: () {},
-                  ),
-                ),
-                InputField(
-                  title: 'Start Time',
-                  hint: '',
-                ),
-                InputField(
-                  title: 'End Time',
-                  hint: '',
-                ),
-                InputField(
-                  title: 'Remind',
-                  hint: '',
-                ),
-                InputField(
-                  title: 'Repeat',
-                  hint: '',
-                ),
-                MyButton(label: 'Add Task', onPressed: () {})
+              
+                MyButton(label: 'Add Task', onPressed: ()=>Get.to(AddTaskPage()))
               ],
             ),
           ),

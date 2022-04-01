@@ -21,20 +21,25 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Get.isDarkMode?Colors.purple:Colors.grey,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.orange)
+      ),
       child:Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: 
         [
           Text(title,style:titleStyle),
           Container(
-          padding: const EdgeInsets.only(top: 8),
-          margin: const EdgeInsets.only(left: 13),
+          padding: const EdgeInsets.all(10),
+          // margin: const EdgeInsets.all(10),
           width: SizeConfig.screenWidth,
           height: 50,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey)
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black)
           ),
           child: Row(
             children: [
@@ -46,8 +51,8 @@ class InputField extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: hint,
                   hintStyle: suubTitleStyle,
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color:  Colors.black)),
+                  // enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                  // focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color:  Colors.black)),
                   ),
                 
               )),
