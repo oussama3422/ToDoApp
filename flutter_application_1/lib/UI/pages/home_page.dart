@@ -30,9 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).backgroundColor,
-        ),
+        appBar: _appBar(),
         body: Container( 
           child: SingleChildScrollView(
             child: Column(
@@ -40,10 +38,27 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
               
-                MyButton(label: 'Add Task', onPressed: ()=>Get.to(AddTaskPage()))
+                Center(child: MyButton(label: 'Add Task', onPressed: ()=>Get.to(AddTaskPage())))
               ],
             ),
           ),
         ));
+  }
+  
+  AppBar _appBar() {
+    return AppBar(
+      leading: IconButton(
+          onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back)),
+      elevation: 0,
+      backgroundColor: Theme.of(context).backgroundColor,
+      centerTitle: true,
+      actions: const [
+         CircleAvatar(
+          backgroundImage:  AssetImage('images/mypic.jpeg'),
+          radius:18,
+        ),
+        SizedBox(width:15),
+      ],
+    );
   }
 }
