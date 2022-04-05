@@ -20,6 +20,7 @@ class Themes {
   static final dark = ThemeData(
     primaryColor: darkGreyClr,
     backgroundColor: darkGreyClr,
+    brightness: Brightness.dark,
   );
 
  
@@ -32,7 +33,7 @@ class Themes {
         textStyle: TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.bold,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
+      color: Get.isDarkMode ? white : darkGreyClr,
     ));
   }
   TextStyle get subheadingStyle {
@@ -40,7 +41,7 @@ class Themes {
         textStyle: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
+      color: Get.isDarkMode ? white : darkGreyClr,
     ));
   }
   TextStyle get titleStyle {
@@ -48,7 +49,7 @@ class Themes {
         textStyle: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
+      color: Get.isDarkMode ? white : darkGreyClr,
     ));
   }
   TextStyle get suubTitleStyle {
@@ -56,7 +57,7 @@ class Themes {
         textStyle: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
+      color: Get.isDarkMode ? white: darkGreyClr,
     ));
   }
   TextStyle get bodyStyle {
@@ -64,7 +65,7 @@ class Themes {
         textStyle: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w300,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
+      color: Get.isDarkMode ? white : darkGreyClr,
     ));
   }
   TextStyle get body2Style {
@@ -72,6 +73,6 @@ class Themes {
         textStyle: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w300,
-      color: Get.isDarkMode ? Colors.grey[200] : Colors.black,
+      color: Get.isDarkMode ? Colors.grey[200] :darkGreyClr,
     ));
   }

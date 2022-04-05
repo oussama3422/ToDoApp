@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo/UI/pages/notification_screen.dart';
 import 'package:get/get.dart';
 import 'package:todo/UI/theme.dart';
 import 'package:todo/services/theme_services.dart';

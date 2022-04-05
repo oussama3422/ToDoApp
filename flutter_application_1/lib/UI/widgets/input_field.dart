@@ -38,7 +38,7 @@ class InputField extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.black),
+            border: Border.all(color:Get.isDarkMode?Colors.white:Colors.black),
           ),
           child: Row(
             children: [
