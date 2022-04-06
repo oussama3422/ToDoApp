@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/services/notification_services.dart';
 import '/ui/pages/add_task_page.dart';
 import '/ui/size_config.dart';
 import '/ui/theme.dart';
@@ -25,6 +26,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TaskController _taskController = Get.put(TaskController());
   DateTime _selectedTime = DateTime.now();
+  late NotifyHelper notifyhelper;
+  @override
+  void initState() {
+    notifyhelper = NotifyHelper();
+    notifyhelper.initialization();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +55,8 @@ class _HomePageState extends State<HomePage> {
       leading: IconButton(
         onPressed: () {
           ThemeServices().switchTheme();
+          NotifyHelper().displayNotifcation(
+              'Theme Changed', 'Oh right Back To Main Page');
         },
         icon: Icon(
           Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,
@@ -134,42 +144,43 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showTasks() {
-    return Expanded(
-      child:_noTaskMsg()
-      // child: Obx(
-      //   () => _taskController.taskList.isEmpty
-      //       ? _noTaskMsg()
-      //       : Container(height: 0),
-      // ),
-    );
+    return Expanded(child: _noTaskMsg()
+        // child: Obx(
+        //   () => _taskController.taskList.isEmpty
+        //       ? _noTaskMsg()
+        //       : Container(height: 0),
+        // ),
+        );
   }
 
   _noTaskMsg() {
     return Stack(
+      alignment: Alignment.center,
       children: [
         SingleChildScrollView(
           child: Wrap(
-            alignment:WrapAlignment.center,
+            alignment: WrapAlignment.center,
             crossAxisAlignment: WrapCrossAlignment.center,
-            direction:  SizeConfig.orientation == Orientation.landscape?Axis.horizontal:Axis.vertical,
-            children:  [
-              SizeConfig.orientation == Orientation.landscape?
-              const SizedBox(height: 6)
-              :
-              SizedBox(height:220),
+            direction: SizeConfig.orientation == Orientation.landscape
+                ? Axis.vertical
+                : Axis.horizontal,
+            children: [
+              SizeConfig.orientation == Orientation.landscape
+                  ? const SizedBox(height: 6)
+                  : SizedBox(height: 200),
               SvgPicture.asset(
                 'images/task.svg',
-                 height: 150,
-                 semanticsLabel: 'Tasks',
-                 color: primaryClr.withOpacity(0.5),
-                ),
+                height: 200,
+                semanticsLabel: 'Tasks',
+                color: primaryClr.withOpacity(0.5),
+              ),
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'You Dont have any Tasks Yet.To Make Youre Day More Productive..',
                   style: headingStyle,
-                  textAlign:TextAlign.center,
-                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

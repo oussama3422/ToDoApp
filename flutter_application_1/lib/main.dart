@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/UI/theme.dart';
+import 'package:todo/services/notification_services.dart';
 import 'package:todo/services/theme_services.dart';
 
 import 'UI/pages/home_page.dart';
 // import 'ui/pages/home_page.dart';
 
-void main() {
+void main() async{
   runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  // NotifyHelper().initialization();
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme:Themes.light,
+      theme: Themes.light,
       darkTheme: Themes.dark,
       themeMode: ThemeServices().theme,
       title: 'To Do App',
