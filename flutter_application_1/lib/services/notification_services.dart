@@ -21,9 +21,9 @@ class NotifyHelper {
   }
 
   Future onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('Notifaction Payload : $payload');
-    }
+    // if (payload != null) {
+    //   debugPrint('Notifaction Payload : $payload');
+    // }
 
     await Get.to(NotificationScreen(payload: payload));
   }
@@ -52,9 +52,17 @@ class NotifyHelper {
       platformChannelSpecifics,
       payload: 'Default-Sounds',
     );
+      var initializationSettingsAndroid =
+        const AndroidInitializationSettings('mypic');
+       var initSetttings =
+        InitializationSettings(android: initializationSettingsAndroid);
+     await flutterLocalNotificationsPlugin.initialize(initSetttings,
+        onSelectNotification: (String? payload) async {
+      onSelectNotification(payload!);
+    });
   }
 
-  scheduleNotifaction(int hour, int minute, Task task) async {
+  scheduleNotifaction() async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'title',
@@ -62,7 +70,7 @@ class NotifyHelper {
       tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
       const NotificationDetails(
           android: AndroidNotificationDetails(
-              'channelId', 'channelName', 'channelDescription')),
+              'channelId', 'channelName', 'channelDescription'),),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -75,18 +83,21 @@ class NotifyHelper {
         largeIcon: DrawableResourceAndroidBitmap('mypic'),
         contentTitle: 'flutter devs',
         htmlFormatContentTitle: true,
+        
         summaryText: 'summaryText',
         htmlFormatSummaryText: true);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'big text channel id',
         'big text channel name',
         'big text channel description',
-        styleInformation: bigPictureStyleInformation);
+        styleInformation: bigPictureStyleInformation
+        
+        );
     var platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
         0, 'big text title', 'silent body', platformChannelSpecifics,
-        payload: "big image notifications");
+        payload: 'big image notifications');
   }
 
 // ::::::::::Cancel Notification Remove The Notification of the given Id

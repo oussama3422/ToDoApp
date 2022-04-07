@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/services/notification_services.dart';
+import 'package:todo/ui/widgets/task_tile.dart';
+import '../../models/task.dart';
 import '/ui/pages/add_task_page.dart';
 import '/ui/size_config.dart';
 import '/ui/theme.dart';
@@ -57,6 +59,8 @@ class _HomePageState extends State<HomePage> {
           ThemeServices().switchTheme();
           NotifyHelper().displayNotifcation(
               'Theme Changed', 'Oh right Back To Main Page');
+          // NotifyHelper().scheduleNotifaction();
+          // NotifyHelper().showBigPictureNotification();
         },
         icon: Icon(
           Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,
@@ -144,7 +148,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showTasks() {
-    return Expanded(child: _noTaskMsg()
+    return Expanded(
+        child: GestureDetector(
+      onTap: () {
+        _showBottomSheet(
+          context,
+          Task(
+            title: 'Title 1',
+            note: 'Note Somthing',
+            isCompleted: 0,
+            startTime: '16:05',
+            endTime: '16:10',
+            color: 1,
+          ),
+        );
+      },
+      child: TaskTile(Task(
+        title: 'Title 1',
+        note: 'Note Somthing',
+        isCompleted: 0,
+        startTime: '16:05',
+        endTime: '16:10',
+        color: 1,
+      )),
+    )
         // child: Obx(
         //   () => _taskController.taskList.isEmpty
         //       ? _noTaskMsg()
@@ -187,5 +214,95 @@ class _HomePageState extends State<HomePage> {
         )
       ],
     );
+  }
+
+  _showBottomSheet(BuildContext context, Task task) {
+    Get.bottomSheet(SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.only(top: 4),
+        width: SizeConfig.screenWidth,
+        height: (SizeConfig.orientation == Orientation.landscape)
+            ? (task.isCompleted == 1
+                ? SizeConfig.screenHeight * 0.6
+                : SizeConfig.screenHeight * 0.8)
+            : (task.isCompleted == 1
+                ? SizeConfig.screenHeight * 0.30
+                : SizeConfig.screenHeight * 0.39),
+        color: Get.isDarkMode ? darkHeaderClr : Colors.white,
+        child: Column(
+          children: [
+            Flexible(
+              child: Container(
+                height: 6,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Get.isDarkMode ? Colors.grey[600] : Colors.grey[300],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            task.isCompleted == 1
+                ? Container()
+                : _buildBottomSheet(
+                    label: 'Task Completed',
+                    onTap: () {
+                      setState(() {
+                        task.isCompleted = 1;
+                      });
+                      Get.back();
+                    },
+                    color: primaryClr,
+                  ),
+            _buildBottomSheet(
+              label: 'Delete Task',
+              onTap: () {
+                Get.back();
+              },
+              color: primaryClr,
+            ),
+            Divider(color: Colors.orange),
+            _buildBottomSheet(
+              label: 'Cancel',
+              onTap: () {
+                Get.back();
+              },
+              color: primaryClr,
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+
+  _buildBottomSheet(
+      {required String label,
+      required Function() onTap,
+      required Color color,
+      bool isClose = false}) {
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 4),
+          height: 65,
+          width: SizeConfig.screenWidth * 0.9,
+          decoration: BoxDecoration(
+            border: Border.all(
+                width: 2,
+                color: isClose
+                    ? Get.isDarkMode
+                        ? Colors.grey[600]!
+                        : Colors.grey[300]!
+                    : color),
+            borderRadius: BorderRadius.circular(20),
+            color: isClose ? Colors.transparent : color,
+          ),
+          child: Center(
+            child: Text(label,
+                style: isClose
+                    ? titleStyle
+                    : titleStyle.copyWith(color: Colors.white)),
+          ),
+        ));
   }
 }
