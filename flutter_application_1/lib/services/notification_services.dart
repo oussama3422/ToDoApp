@@ -52,29 +52,45 @@ class NotifyHelper {
       platformChannelSpecifics,
       payload: 'Default-Sounds',
     );
-      var initializationSettingsAndroid =
+    var initializationSettingsAndroid =
         const AndroidInitializationSettings('mypic');
-       var initSetttings =
+    var initSetttings =
         InitializationSettings(android: initializationSettingsAndroid);
-     await flutterLocalNotificationsPlugin.initialize(initSetttings,
+    await flutterLocalNotificationsPlugin.initialize(initSetttings,
         onSelectNotification: (String? payload) async {
       onSelectNotification(payload!);
     });
   }
 
-  scheduleNotifaction() async {
+  scheduleNotifaction(int hour, int minutes, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      'title',
-      'body',
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      task.id!,
+      task.title!,
+      task.note!,
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      _nextInstanceOftenAM(hour, minutes),
       const NotificationDetails(
-          android: AndroidNotificationDetails(
-              'channelId', 'channelName', 'channelDescription'),),
+        android: AndroidNotificationDetails(
+            'channelId', 'channelName', 'channelDescription'),
+      ),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      payload: '${task.title};${task.note};${task.startTime}',
+      matchDateTimeComponents: DateTimeComponents.time,
     );
+  }
+
+  // ::::::::::::::::::;We Make Next Instance Of Ten AM::::::::::::::::
+  tz.TZDateTime _nextInstanceOftenAM(int hour, int minutes) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduleDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
+    if (scheduleDate.isBefore(now)) {
+      scheduleDate = scheduleDate.add(const Duration(days: 1));
+    }
+
+    return scheduleDate;
   }
 
   Future<void> showBigPictureNotification() async {
@@ -83,16 +99,13 @@ class NotifyHelper {
         largeIcon: DrawableResourceAndroidBitmap('mypic'),
         contentTitle: 'flutter devs',
         htmlFormatContentTitle: true,
-        
         summaryText: 'summaryText',
         htmlFormatSummaryText: true);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'big text channel id',
         'big text channel name',
         'big text channel description',
-        styleInformation: bigPictureStyleInformation
-        
-        );
+        styleInformation: bigPictureStyleInformation);
     var platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(

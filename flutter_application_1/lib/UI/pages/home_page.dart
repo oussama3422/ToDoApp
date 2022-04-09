@@ -2,6 +2,7 @@
 
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,16 +41,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        backgroundColor: context.theme.backgroundColor,
-        appBar: _appBar(),
-        body: Column(
-          children: [
-            _addTaskBar(),
-            _addDataBar(),
-            const SizedBox(height: 6),
-            _showTasks(),
-          ],
-        ));
+      backgroundColor: context.theme.backgroundColor,
+      appBar: _appBar(),
+      body: Column(
+        children: [
+          _addTaskBar(),
+          _addDataBar(),
+          const SizedBox(height: 6),
+          _showTasks(),
+        ],
+      ),
+    );
   }
 
   AppBar _appBar() {
@@ -57,8 +59,6 @@ class _HomePageState extends State<HomePage> {
       leading: IconButton(
         onPressed: () {
           ThemeServices().switchTheme();
-          NotifyHelper().displayNotifcation(
-              'Theme Changed', 'Oh right Back To Main Page');
           // NotifyHelper().scheduleNotifaction();
           // NotifyHelper().showBigPictureNotification();
         },
@@ -149,35 +149,78 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     return Expanded(
-        child: GestureDetector(
-      onTap: () {
-        _showBottomSheet(
-          context,
-          Task(
-            title: 'Title 1',
-            note: 'Note Somthing',
-            isCompleted: 0,
-            startTime: '16:05',
-            endTime: '16:10',
-            color: 1,
-          ),
-        );
-      },
-      child: TaskTile(Task(
-        title: 'Title 1',
-        note: 'Note Somthing',
-        isCompleted: 0,
-        startTime: '16:05',
-        endTime: '16:10',
-        color: 1,
-      )),
-    )
-        // child: Obx(
-        //   () => _taskController.taskList.isEmpty
-        //       ? _noTaskMsg()
-        //       : Container(height: 0),
-        // ),
-        );
+      child: ListView.builder(
+        scrollDirection: SizeConfig.orientation == Orientation.landscape
+            ? Axis.horizontal
+            : Axis.vertical,
+        itemBuilder: (ctx, index) {
+          var task = _taskController.taskList[index];
+          var hour = task.startTime.toString().split(';'[0]);
+          var minutes = task.startTime.toString().split(';'[0]);
+
+          var date = DateFormat.jm().parse(task.startTime!);
+          var myTime = DateFormat('HH:mm').format(date);
+
+          notifyhelper.scheduleNotifaction(
+            int.parse(myTime.toString().split(';')[0]),
+            int.parse(myTime.toString().split(';')[1]),
+            task
+            );
+
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: Duration(milliseconds: 1375),
+            child: SlideAnimation(
+              horizontalOffset: 200,
+              child: FadeInAnimation(
+                duration: Duration(milliseconds: 300),
+                delay: Duration(milliseconds: 300),
+                child: GestureDetector(
+                  onTap: () {
+                    _showBottomSheet(
+                      context,
+                      task,
+                    );
+                  },
+                  child: TaskTile(task),
+                ),
+              ),
+            ),
+          );
+        },
+        itemCount: _taskController.taskList.length,
+      ),
+    );
+    // return Expanded(
+    //     child: GestureDetector(
+    //   onTap: () {
+    //     _showBottomSheet(
+    //       context,
+    //       Task(
+    //         title: 'Title 1',
+    //         note: 'Note Somthing',
+    //         isCompleted: 0,
+    //         startTime: '16:05',
+    //         endTime: '16:10',
+    //         color: 1,
+    //       ),
+    //     );
+    //   },
+    //   child: TaskTile(Task(
+    //     title: 'Title 1',
+    //     note: 'Note Somthing',
+    //     isCompleted: 0,
+    //     startTime: '16:05',
+    //     endTime: '16:10',
+    //     color: 1,
+    //   )),
+    // )
+    //     // child: Obx(
+    //     //   () => _taskController.taskList.isEmpty
+    //     //       ? _noTaskMsg()
+    //     //       : Container(height: 0),
+    //     // ),
+    //     );
   }
 
   _noTaskMsg() {

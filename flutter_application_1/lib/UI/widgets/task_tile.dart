@@ -24,6 +24,7 @@ class TaskTile extends StatelessWidget {
             ? SizeConfig.screenWidth / 2
             : SizeConfig.screenWidth,
         child: Container(
+          height:130,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: getBackGroundColor(task.color),
@@ -34,13 +35,13 @@ class TaskTile extends StatelessWidget {
               Expanded(
                   child: SingleChildScrollView(
                 child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       task.title!,
                       style: GoogleFonts.lato(
                         textStyle: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -62,7 +63,17 @@ class TaskTile extends StatelessWidget {
                         const SizedBox(width: 5),
                         Text('${task.endTime}'),
                       ],
-                    )
+                    ),
+                    Text(
+                      task.note!,
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )),
