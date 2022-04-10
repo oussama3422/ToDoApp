@@ -1,6 +1,8 @@
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/ui/pages/home_page.dart';
 import 'package:todo/ui/theme.dart';
 import 'package:todo/controllers/task_controller.dart';
@@ -58,7 +60,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               InputField(
                 title: 'Date',
                 hint: DateFormat('dd/MM/yyy').format(DateTime.now()),
-                widget: const Icon(Icons.calendar_month),
+                widget: IconButton(icon:const Icon(Icons.calendar_month_sharp),onPressed: ()=>_getDateFromUser(),),
               ),
               const SizedBox(height: 5),
               Row(
@@ -68,7 +70,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: InputField(
                       title: 'Start Time',
                       hint: _startTime,
-                      widget: const Icon(Icons.alarm_rounded),
+                      widget: IconButton(icon:const Icon(Icons.alarm_rounded),onPressed: ()=>_getTimeFromUser(isStratTime: true),),
                     ),
                   ),
                   const SizedBox(width: 2),
@@ -76,7 +78,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: InputField(
                       title: 'End Time',
                       hint: _endTime,
-                      widget: const Icon(Icons.alarm_rounded),
+                      widget: IconButton(icon:const Icon(Icons.alarm_rounded),onPressed: ()=>_getTimeFromUser(isStratTime: false),),
                     ),
                   ),
                 ],
@@ -132,9 +134,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 children: [
                   colorPallete(),
                   MyButton(
-                    label: 'Add Task',
-                    onPressed: () => Get.back(),
-                  ),
+                      label: 'Add Task',
+                      onPressed: () {
+                        _validateDate();
+                        Get.back();
+                      }),
                 ],
               ),
             ],
@@ -150,16 +154,64 @@ class _AddTaskPageState extends State<AddTaskPage> {
       elevation: 0,
       centerTitle: true,
       actions: const [
-         CircleAvatar(
-          backgroundImage:  AssetImage('images/mypic.jpeg'),
-          radius:18,
+        CircleAvatar(
+          backgroundImage: AssetImage('images/mypic.jpeg'),
+          radius: 18,
         ),
-        SizedBox(width:15),
+        SizedBox(width: 15),
       ],
     );
   }
 
+  _validateDate() {
+    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
+      _addTaskToDataBase();
+      Get.back();
+    } else if (_titleController.text.isEmpty && _noteController.text.isEmpty) {
+      Get.snackbar(
+        'Required',
+        'It\'s required To Fill The Filed',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.white,
+        colorText: pinkClr,
+        icon: const Icon(Icons.warning),
+      );
+    } else {
+      print(
+          '###############SOMETHING WENT WRONG##################################');
+    }
+  }
+
+  _addTaskToDataBase() async {
+    int value = await _taskController.addTask(
+        task: Task(
+      title: _titleController.text,
+      note: _noteController.text,
+      isCompleted: 0,
+      date: DateFormat.yMd().format(_selectedTime),
+      startTime: _startTime,
+      endTime: _endTime,
+      color: selectedColor,
+      remind: _selectedRemind,
+      repeat: _selectedRepaet,
+    ));
+    print(value);
+  }
+   _getTimeFromUser({bool? isStratTime}){
+
+
+   }
+  _getDateFromUser() {
+    showDatePicker(
+        context: context,
+        initialDate: _selectedTime,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2030)
+        );
+
+  }
   colorPallete() {
+ 
     return Column(
       children: [
         Text(

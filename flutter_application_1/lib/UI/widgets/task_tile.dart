@@ -21,7 +21,7 @@ class TaskTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),  
         width: SizeConfig.orientation == Orientation.landscape
-            ? SizeConfig.screenWidth / 2
+            ? SizeConfig.screenWidth! / 2
             : SizeConfig.screenWidth,
         child: Container(
           height:130,

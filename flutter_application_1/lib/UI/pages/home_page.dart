@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 4),
           height: 65,
-          width: SizeConfig.screenWidth * 0.9,
+          width: SizeConfig.screenWidth! * 0.9,
           decoration: BoxDecoration(
             border: Border.all(
                 width: 2,
