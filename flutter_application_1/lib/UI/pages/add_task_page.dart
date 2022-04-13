@@ -146,6 +146,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   AppBar _appBar() {
     return AppBar(
+      // this background of AppBar
       backgroundColor: Theme.of(context).backgroundColor,
       elevation: 0,
       centerTitle: true,
