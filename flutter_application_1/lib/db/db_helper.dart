@@ -16,7 +16,7 @@ class DBHelper {
         String path = await getDatabasesPath() + 'task.db';
         db = await openDatabase(path, version: version,
             onCreate: (Database db2, int version2) async {
-          debugPrint('The DB Was Created');
+         
           await db?.execute('CREATE TABLE $_tabelName('
               'id INTEGER PRIMARY KEY AUTOINCREMENT,'
               'title STRING ,note TEXT, date STRING,'
@@ -24,9 +24,10 @@ class DBHelper {
               'remind INTEGER, repeat STRING, '
               'color INTEGER,'
               'isComplted INTEGER)');
+               debugPrint('The DB Was Created');
         });
       } catch (e) {
-        print(e);
+        print('Somthing Went Wrong');
       }
     }
   }
@@ -53,7 +54,7 @@ class DBHelper {
     ''', [1, id]);
   }
 
-  static Future<List<Map<String,Object?>>> query(int id) async {
+  static Future<List<Map<String,Object?>>> query() async {
     print('Query Opreation');
     return await db!.query(_tabelName);
   }

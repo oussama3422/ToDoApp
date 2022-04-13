@@ -60,7 +60,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
               InputField(
                 title: 'Date',
                 hint: DateFormat('dd/MM/yyy').format(DateTime.now()),
-                widget: IconButton(icon:const Icon(Icons.calendar_month_sharp),onPressed: ()=>_getDateFromUser(),),
+                widget: IconButton(
+                  icon: const Icon(Icons.calendar_month_sharp),
+                  onPressed: () => _getDateFromUser(),
+                ),
               ),
               const SizedBox(height: 5),
               Row(
@@ -70,7 +73,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: InputField(
                       title: 'Start Time',
                       hint: _startTime,
-                      widget: IconButton(icon:const Icon(Icons.alarm_rounded),onPressed: ()=>_getTimeFromUser(isStratTime: true),),
+                      widget: IconButton(
+                        icon: const Icon(Icons.alarm_rounded),
+                        onPressed: () => _getTimeFromUser(isStratTime: true),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 2),
@@ -78,7 +84,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: InputField(
                       title: 'End Time',
                       hint: _endTime,
-                      widget: IconButton(icon:const Icon(Icons.alarm_rounded),onPressed: ()=>_getTimeFromUser(isStratTime: false),),
+                      widget: IconButton(
+                        icon: const Icon(Icons.alarm_rounded),
+                        onPressed: () => _getTimeFromUser(isStratTime: false),
+                      ),
                     ),
                   ),
                 ],
@@ -135,10 +144,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   colorPallete(),
                   MyButton(
                       label: 'Add Task',
-                      onPressed: () {
-                        _validateDate();
-                        Get.back();
-                      }),
+                      onPressed: () =>_validateDate(),
+                      ),
                 ],
               ),
             ],
@@ -167,12 +174,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
       _addTaskToDataBase();
       Get.back();
-    } else if (_titleController.text.isEmpty && _noteController.text.isEmpty) {
+    } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar(
         'Required',
         'It\'s required To Fill The Filed',
+        messageText: const Text('It\'s required To Fill The Filed'),
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[600],
+        snackStyle: SnackStyle.FLOATING,
         colorText: pinkClr,
         icon: const Icon(Icons.warning),
       );
@@ -197,21 +206,43 @@ class _AddTaskPageState extends State<AddTaskPage> {
     ));
     print(value);
   }
-   _getTimeFromUser({bool? isStratTime}){
 
-
-   }
-  _getDateFromUser() {
-    showDatePicker(
+  _getTimeFromUser({bool? isStratTime}) async{
+       TimeOfDay? _pickedTime = await showTimePicker(
+         initialEntryMode: TimePickerEntryMode.input,
+        context: context,
+        initialTime: isStratTime!? TimeOfDay.fromDateTime(DateTime.now()):TimeOfDay.fromDateTime(DateTime.now().add(const Duration(minutes: 15),),),);
+    if (isStratTime) {
+      setState(() {
+        _startTime = _pickedTime!.format(context);
+      });
+    } 
+    else if(!isStratTime) 
+    {
+       setState(() {
+        _endTime = _pickedTime!.format(context);
+      });
+    }
+    else {
+      print('Somthing Went Wrong With null ');
+    }
+  }
+  _getDateFromUser() async {
+    DateTime? _pickedDate = await showDatePicker(
         context: context,
         initialDate: _selectedTime,
         firstDate: DateTime(2015),
-        lastDate: DateTime(2030)
-        );
-
+        lastDate: DateTime(2030));
+    if (_pickedDate != null) {
+      setState(() {
+        _selectedTime = _pickedDate;
+      });
+    } else {
+      print('Somthing Went Wrong With null ');
+    }
   }
+
   colorPallete() {
- 
     return Column(
       children: [
         Text(

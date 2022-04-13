@@ -149,7 +149,9 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     return Expanded(
-      child: ListView.builder(
+      child: _taskController.taskList.isNotEmpty
+      ?
+       ListView.builder(
         scrollDirection: SizeConfig.orientation == Orientation.landscape
             ? Axis.horizontal
             : Axis.vertical,
@@ -189,7 +191,9 @@ class _HomePageState extends State<HomePage> {
           );
         },
         itemCount: _taskController.taskList.length,
-      ),
+      )
+      :
+      _noTaskMsg(),
     );
     // return Expanded(
     //     child: GestureDetector(
@@ -240,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                   : SizedBox(height: 200),
               SvgPicture.asset(
                 'images/task.svg',
-                height: 200,
+                height: 160,
                 semanticsLabel: 'Tasks',
                 color: primaryClr.withOpacity(0.5),
               ),
@@ -260,7 +264,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showBottomSheet(BuildContext context, Task task) {
-    Get.bottomSheet(SingleChildScrollView(
+    Get.bottomSheet(
+      SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.only(top: 4),
         width: SizeConfig.screenWidth,

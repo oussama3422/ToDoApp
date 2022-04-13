@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeServices().theme,
       title: 'To Do App',
       debugShowCheckedModeBanner: false,
-      // home: const NotificationScreen(payload: 'Oussama;It time to Leave;You Have to check is which one do you want;12:31'),
       home: const HomePage(),
     );
   }
