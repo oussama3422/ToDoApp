@@ -16,14 +16,7 @@ class DBHelper {
         String path = await getDatabasesPath() + 'task.db';
         db = await openDatabase(path, version: version,
             onCreate: (Database db2, int version2) async {
-         
-          await db?.execute('CREATE TABLE $_tabelName('
-              'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-              'title STRING ,note TEXT, date STRING,'
-              'startTime STRING, endTime STRING ,'
-              'remind INTEGER, repeat STRING, '
-              'color INTEGER,'
-              'isComplted INTEGER)');
+          await db?.execute('CREATE TABLE $_tabelName(id INTEGER PRIMARY KEY AUTOINCREMENT,title STRING ,note TEXT, date STRING,startTime STRING, endTime STRING ,remind INTEGER, repeat STRING, color INTEGER,isComplted INTEGER');
                debugPrint('The DB Was Created');
         });
       } catch (e) {
