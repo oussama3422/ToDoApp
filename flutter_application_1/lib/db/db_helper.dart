@@ -5,18 +5,18 @@ import '../models/task.dart';
 
 class DBHelper {
   static Database? db;
-  static final int version = 1;
-  static final String _tabelName = 'tasks';
+  static  int version = 1;
+  static  String tabelName = 'tasks';
 
   static Future<void> initDb() async {
     if (db != null) {
       debugPrint('No null db');
     } else {
       try {
-        String path = await getDatabasesPath() + 'task.db';
-        db = await openDatabase(path, version: version,
+        // String path = await getDatabasesPath() + 'task.db';
+        db = await openDatabase('task.db', version: version,
             onCreate: (Database db2, int version2) async {
-          await db?.execute('CREATE TABLE $_tabelName(id INTEGER PRIMARY KEY AUTOINCREMENT,title STRING ,note TEXT, date STRING,startTime STRING, endTime STRING ,remind INTEGER, repeat STRING, color INTEGER,isComplted INTEGER');
+          await db!.execute('CREATE TABLE $tabelName(id INTEGER PRIMARY KEY AUTOINCREMENT,title STRING ,note TEXT, date STRING,startTime STRING, endTime STRING ,remind INTEGER, repeat STRING, color INTEGER,isComplted INTEGER');
                debugPrint('The DB Was Created');
         });
       } catch (e) {
@@ -28,13 +28,13 @@ class DBHelper {
   static insert(Task task) async {
     print('Insert Opreation');
 
-    return await db!.insert(_tabelName, task.toJson());
+    return await db!.insert(tabelName, task.toJson());
   }
 
   static delete(Task task) async {
     print('delete Opreation');
 
-    return await db!.delete(_tabelName, where: 'id = ? ', whereArgs: [task.id]);
+    return await db!.delete(tabelName, where: 'id = ? ', whereArgs: [task.id]);
   }
 
   static update(int id) async {
@@ -49,6 +49,6 @@ class DBHelper {
 
   static Future<List<Map<String,Object?>>> query() async {
     print('Query Opreation');
-    return await db!.query(_tabelName);
+    return await db!.query(tabelName);
   }
 }

@@ -150,50 +150,55 @@ class _HomePageState extends State<HomePage> {
   _showTasks() {
     return Expanded(
       child: _taskController.taskList.isNotEmpty
-      ?
-       ListView.builder(
-        scrollDirection: SizeConfig.orientation == Orientation.landscape
-            ? Axis.horizontal
-            : Axis.vertical,
-        itemBuilder: (ctx, index) {
-          var task = _taskController.taskList[index];
-          var hour = task.startTime.toString().split(';'[0]);
-          var minutes = task.startTime.toString().split(';'[0]);
+          ? ListView.builder(
+              scrollDirection: SizeConfig.orientation == Orientation.landscape
+                  ? Axis.horizontal
+                  : Axis.vertical,
+              itemBuilder: (ctx, index) {
+                var task = _taskController.taskList[index];
+                
+                if (task.repeat == 'Daily' &&
+                        task.date == DateFormat.yMd().format(_selectedTime) ||
+                    task.repeat == 'Weekly' &&
+                        _selectedTime
+                                    .difference(
+                                        DateFormat.yMd().parse(task.date!))
+                                    .inDays %
+                                7 ==
+                            0 ||
+                    task.repeat == 'Monthly' &&
+                        DateFormat.yMd().parse(task.date!).day ==
+                            _selectedTime.day) 
+                  var hour = task.startTime.toString().split(';'[0]);
+                  var minutes = task.startTime.toString().split(';'[0]);
 
-          var date = DateFormat.jm().parse(task.startTime!);
-          var myTime = DateFormat('HH:mm').format(date);
+                  var date = DateFormat.jm().parse(task.startTime!);
+                  var myTime = DateFormat('HH:mm').format(date);
 
-          notifyhelper.scheduleNotifaction(
-            int.parse(myTime.toString().split(';')[0]),
-            int.parse(myTime.toString().split(';')[1]),
-            task
-            );
+                  notifyhelper.scheduleNotifaction(
+                      int.parse(myTime.toString().split(';')[0]),
+                      int.parse(myTime.toString().split(';')[1]),
+                      task);
 
-          return AnimationConfiguration.staggeredList(
-            position: index,
-            duration: Duration(milliseconds: 1375),
-            child: SlideAnimation(
-              horizontalOffset: 200,
-              child: FadeInAnimation(
-                duration: Duration(milliseconds: 300),
-                delay: Duration(milliseconds: 300),
-                child: GestureDetector(
-                  onTap: () {
-                    _showBottomSheet(
-                      context,
-                      task,
-                    );
-                  },
-                  child: TaskTile(task),
-                ),
-              ),
-            ),
-          );
-        },
-        itemCount: _taskController.taskList.length,
-      )
-      :
-      _noTaskMsg(),
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    // duration: Duration(milliseconds: 1375),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showBottomSheet(
+                          context,
+                          task,
+                        );
+                      },
+                      child: TaskTile(task),
+                    ),
+                  );
+                },
+              
+              itemCount: _taskController.taskList.length,
+            )
+          : _noTaskMsg(),
+          
     );
     // return Expanded(
     //     child: GestureDetector(
@@ -225,38 +230,39 @@ class _HomePageState extends State<HomePage> {
     //     //       : Container(height: 0),
     //     // ),
     //     );
+    
   }
 
   _noTaskMsg() {
     return Stack(
-      alignment: Alignment.center,
+      // alignment: Alignment.center,
       children: [
-        SingleChildScrollView(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            direction: SizeConfig.orientation == Orientation.landscape
-                ? Axis.vertical
-                : Axis.horizontal,
-            children: [
-              SizeConfig.orientation == Orientation.landscape
-                  ? const SizedBox(height: 6)
-                  : SizedBox(height: 200),
-              SvgPicture.asset(
-                'images/task.svg',
-                height: 160,
-                semanticsLabel: 'Tasks',
-                color: primaryClr.withOpacity(0.5),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'You Dont have any Tasks Yet.To Make Youre Day More Productive..',
+        RefreshIndicator(
+          onRefresh: onRefresh,
+          child: SingleChildScrollView(
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: SizeConfig.orientation == Orientation.landscape
+                  ? Axis.vertical
+                  : Axis.horizontal,
+              children: [
+                SizeConfig.orientation == Orientation.landscape
+                    ? const SizedBox(height: 6)
+                    : SizedBox(height: 200),
+                SvgPicture.asset(
+                  'images/task.svg',
+                  height: 100,
+                  semanticsLabel: 'Tasks',
+                  color: primaryClr.withOpacity(0.5),
+                ),
+                Text(
+                  'You Dont have any Tasks Yet',
                   style: headingStyle,
                   textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         )
       ],
@@ -264,8 +270,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showBottomSheet(BuildContext context, Task task) {
-    Get.bottomSheet(
-      SingleChildScrollView(
+    Get.bottomSheet(SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.only(top: 4),
         width: SizeConfig.screenWidth,
@@ -352,5 +357,9 @@ class _HomePageState extends State<HomePage> {
                     : titleStyle.copyWith(color: Colors.white)),
           ),
         ));
+  }
+
+  Future<void> onRefresh() async{
+    return _taskController.getTasks();
   }
 }
