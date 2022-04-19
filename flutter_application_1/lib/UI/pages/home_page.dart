@@ -3,19 +3,20 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/UI/widgets/task_tile.dart';
 import 'package:todo/services/notification_services.dart';
-import 'package:todo/ui/widgets/task_tile.dart';
+// import 'package:todo/UI/widgets/task_tile.dart';
 import '../../models/task.dart';
-import '/ui/pages/add_task_page.dart';
-import '/ui/size_config.dart';
-import '/ui/theme.dart';
-import '/ui/widgets/button.dart';
+import '/UI/pages/add_task_page.dart';
+import '/UI/size_config.dart';
+import '/UI/theme.dart';
+import '/UI/widgets/button.dart';
 import '/services/theme_services.dart';
-import '/ui/theme.dart';
+// import '/UI/theme.dart';
 import '../../controllers/task_controller.dart';
 import '../../services/theme_services.dart';
 
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
           _addTaskBar(),
           _addDataBar(),
           const SizedBox(height: 6),
-          _showTasks(),
+          showTasks(),
         ],
       ),
     );
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(DateFormat.yMMMMd().format(DateTime.now()),
+              Text(DateFormat.yMMMd().format(DateTime.now()),
                   style: subheadingStyle),
               Text(
                 'Today',
@@ -99,11 +100,13 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           MyButton(
+            icon: Icon(Icons.add_task_sharp),
               label: 'Add Task',
               onPressed: () async {
                 await Get.to(AddTaskPage());
                 _taskController.getTasks();
-              })
+              }
+              ),
         ],
       ),
     );
@@ -147,99 +150,89 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _showTasks() {
+    showTasks() {
     return Expanded(
-      child: _taskController.taskList.isNotEmpty
-          ? ListView.builder(
+      child: Obx(() {
+        if (_taskController.taskList.isEmpty) {
+          return _noTaskMsg();
+        } else {
+          return RefreshIndicator(
+            onRefresh:onRefresh,
+            child: ListView.builder(
               scrollDirection: SizeConfig.orientation == Orientation.landscape
                   ? Axis.horizontal
                   : Axis.vertical,
-              itemBuilder: (ctx, index) {
+              itemBuilder: (BuildContext context, int index) {
                 var task = _taskController.taskList[index];
-                
-                if (task.repeat == 'Daily' &&
-                        task.date == DateFormat.yMd().format(_selectedTime) ||
-                    task.repeat == 'Weekly' &&
-                        _selectedTime
-                                    .difference(
-                                        DateFormat.yMd().parse(task.date!))
-                                    .inDays %
-                                7 ==
-                            0 ||
-                    task.repeat == 'Monthly' &&
-                        DateFormat.yMd().parse(task.date!).day ==
-                            _selectedTime.day) 
-                  var hour = task.startTime.toString().split(';'[0]);
-                  var minutes = task.startTime.toString().split(';'[0]);
+
+// :::::::::::::::we check if they TodoList Diallt Or Not::::::::::::::::::::::::::::::
+                // final timeformated=DateFormat.yMd().parse(task.date!);
+
+                if ((task.repeat == 'Daily' 
+                        ||
+                        task.date ==  DateFormat.yMd().format(_selectedTime))
+                        || 
+                        (task.repeat=='Weeklly' && _selectedTime.difference(DateFormat.yMd().parse(task.date!)).inDays %7==0) 
+                        ||
+                        (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
+                {
+                  try{
+                  var hours = task.startTime.toString().split(':')[0];
+                  var minutes = task.startTime.toString().split(':')[1];
+
+                  debugPrint('My time is ' + hours);
+                  debugPrint('My Minutes is ' + minutes);
 
                   var date = DateFormat.jm().parse(task.startTime!);
-                  var myTime = DateFormat('HH:mm').format(date);
+                  var myTime = DateFormat('hh:mm a').format(date);
 
                   notifyhelper.scheduleNotifaction(
-                      int.parse(myTime.toString().split(';')[0]),
-                      int.parse(myTime.toString().split(';')[1]),
-                      task);
-
+                    int.parse(myTime.toString().split(':')[0]),
+                    int.parse(myTime.toString().split(':')[0]),
+                    _taskController.taskList[index],
+                  );
+                  }catch(e){
+                    print(e);
+                  }
                   return AnimationConfiguration.staggeredList(
                     position: index,
-                    // duration: Duration(milliseconds: 1375),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showBottomSheet(
-                          context,
-                          task,
-                        );
-                      },
-                      child: TaskTile(task),
+                    duration: const Duration(milliseconds: 1373),
+                    child: SlideAnimation(
+                      horizontalOffset: 300,
+                      child: FadeInAnimation(
+                        child: GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(
+                              context,
+                              task,
+                            );
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ),
                     ),
                   );
-                },
-              
+                }  else {
+                  return Container();
+                }
+              },
               itemCount: _taskController.taskList.length,
-            )
-          : _noTaskMsg(),
-          
+            ),
+          );
+        }
+      }),
     );
-    // return Expanded(
-    //     child: GestureDetector(
-    //   onTap: () {
-    //     _showBottomSheet(
-    //       context,
-    //       Task(
-    //         title: 'Title 1',
-    //         note: 'Note Somthing',
-    //         isCompleted: 0,
-    //         startTime: '16:05',
-    //         endTime: '16:10',
-    //         color: 1,
-    //       ),
-    //     );
-    //   },
-    //   child: TaskTile(Task(
-    //     title: 'Title 1',
-    //     note: 'Note Somthing',
-    //     isCompleted: 0,
-    //     startTime: '16:05',
-    //     endTime: '16:10',
-    //     color: 1,
-    //   )),
-    // )
-    //     // child: Obx(
-    //     //   () => _taskController.taskList.isEmpty
-    //     //       ? _noTaskMsg()
-    //     //       : Container(height: 0),
-    //     // ),
-    //     );
+  
     
   }
 
   _noTaskMsg() {
     return Stack(
-      // alignment: Alignment.center,
+      alignment: Alignment.center,
       children: [
-        RefreshIndicator(
-          onRefresh: onRefresh,
-          child: SingleChildScrollView(
+        SingleChildScrollView(
+          child: RefreshIndicator(
+            onRefresh: onRefresh,
             child: Wrap(
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -247,19 +240,15 @@ class _HomePageState extends State<HomePage> {
                   ? Axis.vertical
                   : Axis.horizontal,
               children: [
-                SizeConfig.orientation == Orientation.landscape
-                    ? const SizedBox(height: 6)
-                    : SizedBox(height: 200),
-                SvgPicture.asset(
-                  'images/task.svg',
-                  height: 100,
-                  semanticsLabel: 'Tasks',
-                  color: primaryClr.withOpacity(0.5),
-                ),
-                Text(
-                  'You Dont have any Tasks Yet',
-                  style: headingStyle,
-                  textAlign: TextAlign.center,
+                SizeConfig.orientation == Orientation.landscape ? const SizedBox(height: 6) : SizedBox(height: 200),
+                Image.asset('images/ToDoTask.png', height: 200,color: primaryClr.withOpacity(0.7),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'You dont have any tasks Yet !!',
+                    style: headingStyle,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
@@ -362,4 +351,5 @@ class _HomePageState extends State<HomePage> {
   Future<void> onRefresh() async{
     return _taskController.getTasks();
   }
-}
+  }
+

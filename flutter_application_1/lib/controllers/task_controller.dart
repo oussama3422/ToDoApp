@@ -13,7 +13,7 @@ class TaskController extends GetxController {
 // :::::::::::::::::::::This Function It Turn Is get Task From To DataBase::::::::::::::::::::
   Future<void> getTasks() async {
     final List<Map<String, dynamic>> task = await DBHelper.query();
-    taskList.assignAll(task.map((tasksData) => Task.fromJson(tasksData)));
+    taskList.assignAll(task.map((tasksData) => Task.fromJson(tasksData)).toList());
   }
 
 // :::::::::::::::::::::This Function It Use to Delete Task From DataBase::::::::::

@@ -40,15 +40,15 @@ class Task {
   }
 
   Task.fromJson(Map<String, dynamic> json) {
-      id= json['id']?.toInt();
+      id= json['id'];
       title= json['title'];
       note= json['note'];
-      isCompleted= json['isCompleted']?.toInt();
+      isCompleted= json['isCompleted'];
       date= json['date'];
       startTime = json['startTime'];
       endTime= json['endTime'];
-      color= json['color']?.toInt();
-      remind=json['remind']?.toInt();
+      color= json['color'];
+      remind=json['remind'];
       repeat=json['repeat'];
   }
 

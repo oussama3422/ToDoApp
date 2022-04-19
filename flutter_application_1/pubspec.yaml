@@ -43,4 +43,4 @@ flutter:
   assets:
     - images/person.jpeg
     - images/mypic.jpeg
-    - images/task.svg
+    - images/ToDoTask.png

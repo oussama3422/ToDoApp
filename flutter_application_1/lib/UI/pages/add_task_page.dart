@@ -1,12 +1,12 @@
-import 'package:date_picker_timeline/date_picker_timeline.dart';
+// import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/models/task.dart';
-import 'package:todo/ui/pages/home_page.dart';
-import 'package:todo/ui/theme.dart';
+// import 'package:todo/Ui/pages/home_page.dart';
+import 'package:todo/Ui/theme.dart';
 import 'package:todo/controllers/task_controller.dart';
-import 'package:todo/ui/widgets/button.dart';
+import 'package:todo/Ui/widgets/button.dart';
 import '../widgets/input_field.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -143,8 +143,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 children: [
                   colorPallete(),
                   MyButton(
+                      icon: const Icon(Icons.add_task_sharp),
                       label: 'Add Task',
                       onPressed: () =>_validateDate(),
+                    
                       ),
                 ],
               ),

@@ -4,9 +4,10 @@ import 'package:sqflite/sqflite.dart';
 import '../models/task.dart';
 
 class DBHelper {
+  
   static Database? db;
-  static  int version = 1;
-  static  String tabelName = 'tasks';
+  static  const int version = 1;
+  static  const String tabelName = 'tasks';
 
   static Future<void> initDb() async {
     if (db != null) {
@@ -14,10 +15,9 @@ class DBHelper {
     } else {
       try {
         // String path = await getDatabasesPath() + 'task.db';
-        db = await openDatabase('task.db', version: version,
-            onCreate: (Database db2, int version2) async {
-          await db!.execute('CREATE TABLE $tabelName(id INTEGER PRIMARY KEY AUTOINCREMENT,title STRING ,note TEXT, date STRING,startTime STRING, endTime STRING ,remind INTEGER, repeat STRING, color INTEGER,isComplted INTEGER');
-               debugPrint('The DB Was Created');
+        db = await openDatabase('task.db', version: version,onCreate: (Database db, int version) async {
+          await db.execute('CREATE TABLE $tabelName(id INTEGER PRIMARY KEY AUTOINCREMENT,title STRING ,note TEXT, date STRING,startTime STRING, endTime STRING ,remind INTEGER, repeat STRING, color INTEGER,isComplted INTEGER');
+          print('The DB Was Created');
         });
       } catch (e) {
         print('Somthing Went Wrong');
