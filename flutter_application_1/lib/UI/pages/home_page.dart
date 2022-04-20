@@ -19,6 +19,7 @@ import '/services/theme_services.dart';
 // import '/UI/theme.dart';
 import '../../controllers/task_controller.dart';
 import '../../services/theme_services.dart';
+import 'add_task_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -60,7 +61,6 @@ class _HomePageState extends State<HomePage> {
       leading: IconButton(
         onPressed: () {
           ThemeServices().switchTheme();
-          // NotifyHelper().scheduleNotifaction();
           // NotifyHelper().showBigPictureNotification();
         },
         icon: Icon(
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           MyButton(
-            icon: Icon(Icons.add_task_sharp),
+            icon: Icon(Icons.add_task_sharp,color: Get.isDarkMode?Colors.grey:Colors.white),
               label: 'Add Task',
               onPressed: () async {
                 await Get.to(AddTaskPage());
@@ -265,11 +265,11 @@ class _HomePageState extends State<HomePage> {
         width: SizeConfig.screenWidth,
         height: (SizeConfig.orientation == Orientation.landscape)
             ? (task.isCompleted == 1
-                ? SizeConfig.screenHeight * 0.6
-                : SizeConfig.screenHeight * 0.8)
+                ? SizeConfig.screenHeight! * 0.6
+                : SizeConfig.screenHeight! * 0.8)
             : (task.isCompleted == 1
-                ? SizeConfig.screenHeight * 0.30
-                : SizeConfig.screenHeight * 0.39),
+                ? SizeConfig.screenHeight! * 0.30
+                : SizeConfig.screenHeight! * 0.39),
         color: Get.isDarkMode ? darkHeaderClr : Colors.white,
         child: Column(
           children: [
