@@ -114,7 +114,7 @@ class NotifyHelper {
   }
 
 // ::::::::::Cancel Notification Remove The Notification of the given Id
-  Future<void> cancelNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+  Future<void> cancelNotification(Task tsk) async {
+    await flutterLocalNotificationsPlugin.cancel(tsk.id!);
   }
 }

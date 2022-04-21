@@ -33,8 +33,12 @@ class DBHelper {
 
   static delete(Task task) async {
     print('delete Opreation');
-
     return await db!.delete(tabelName, where: 'id = ? ', whereArgs: [task.id]);
+  }
+  // ::::::::::::::::::::::Delte All Tasks From DB ::::::::::::::::::::::://
+  static deleteAll() async {
+    print('delete Opreation');
+    return await db!.delete(tabelName);
   }
 
   static update(int id) async {

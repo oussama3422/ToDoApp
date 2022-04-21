@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     notifyhelper = NotifyHelper();
     notifyhelper.initialization();
+    _taskController.getTasks();
     super.initState();
   }
 
@@ -72,7 +73,17 @@ class _HomePageState extends State<HomePage> {
       elevation: 0,
       backgroundColor: Theme.of(context).backgroundColor,
       centerTitle: true,
-      actions: const [
+      actions:  [
+        Padding(
+          padding: const EdgeInsets.only(right:20.0),
+          child: IconButton(
+            icon:Icon(Icons.delete_sharp,size: 30,color: Get.isDarkMode?Colors.grey:Colors.black,),
+            onPressed: (){
+              _taskController.deletellTasks();
+            },
+          ),
+        ),
+        
         CircleAvatar(
           backgroundImage: AssetImage('images/mypic.jpeg'),
           radius: 18,
@@ -168,14 +179,14 @@ class _HomePageState extends State<HomePage> {
 // :::::::::::::::we check if they TodoList Diallt Or Not::::::::::::::::::::::::::::::
                 // final timeformated=DateFormat.yMd().parse(task.date!);
 
-                if ((task.repeat == 'Daily' 
-                        ||
-                        task.date ==  DateFormat.yMd().format(_selectedTime))
-                        || 
-                        (task.repeat=='Weeklly' && _selectedTime.difference(DateFormat.yMd().parse(task.date!)).inDays %7==0) 
-                        ||
-                        (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
-                {
+                // if ((task.repeat == 'Daily' 
+                //         &&
+                //         task.date ==  DateFormat.yMd().format(_selectedTime))
+                //         || 
+                //         (task.repeat=='Weeklly' && _selectedTime.difference(DateFormat.yMd().parse(task.date!)).inDays %7==0) 
+                //         ||
+                //         (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
+                // {
                   try{
                   var hours = task.startTime.toString().split(':')[0];
                   var minutes = task.startTime.toString().split(':')[1];
@@ -212,9 +223,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   );
-                }  else {
-                  return Container();
-                }
+                // }  else {
+                //   return Container();
+                // }
               },
               itemCount: _taskController.taskList.length,
             ),
@@ -259,17 +270,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showBottomSheet(BuildContext context, Task task) {
-    Get.bottomSheet(SingleChildScrollView(
+    Get.bottomSheet(
+      SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.only(top: 4),
         width: SizeConfig.screenWidth,
         height: (SizeConfig.orientation == Orientation.landscape)
             ? (task.isCompleted == 1
-                ? SizeConfig.screenHeight! * 0.6
-                : SizeConfig.screenHeight! * 0.8)
+                ? SizeConfig.screenHeight * 0.6
+                : SizeConfig.screenHeight * 0.8)
             : (task.isCompleted == 1
-                ? SizeConfig.screenHeight! * 0.30
-                : SizeConfig.screenHeight! * 0.39),
+                ? SizeConfig.screenHeight * 0.30
+                : SizeConfig.screenHeight * 0.39),
         color: Get.isDarkMode ? darkHeaderClr : Colors.white,
         child: Column(
           children: [
@@ -294,14 +306,16 @@ class _HomePageState extends State<HomePage> {
                       });
                       Get.back();
                     },
-                    color: primaryClr,
+                    color: Colors.green,
                   ),
             _buildBottomSheet(
               label: 'Delete Task',
               onTap: () {
+                notifyhelper.cancelNotification(task);
+                _taskController.deleteTasks(task);
                 Get.back();
               },
-              color: primaryClr,
+              color: Colors.red,
             ),
             Divider(color: Colors.orange),
             _buildBottomSheet(

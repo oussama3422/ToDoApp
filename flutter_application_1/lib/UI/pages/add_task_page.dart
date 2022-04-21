@@ -43,8 +43,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       CustomScrollView(
         slivers: [
             SliverAppBar(
-           elevation: 0,
-          //  pinned: true,
+             backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
            expandedHeight: 100,
            flexibleSpace: FlexibleSpaceBar(
              background: Image.asset('images/feature.png',fit: BoxFit.cover,),
@@ -175,20 +174,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      backgroundColor: Colors.blueGrey,
-      elevation: 0,
-      centerTitle: true,
-      actions: const [
-        CircleAvatar(
-          backgroundImage: AssetImage('images/mypic.jpeg'),
-          radius: 18,
-        ),
-        SizedBox(width: 15),
-      ],
-    );
-  }
+  // AppBar appBar() {
+  //   return AppBar(
+  //     backgroundColor: Colors.blueGrey,
+  //     elevation: 0,
+  //     centerTitle: true,
+  //     actions: const [
+  //       CircleAvatar(
+  //         backgroundImage: AssetImage('images/mypic.jpeg'),
+  //         radius: 18,
+  //       ),
+  //       SizedBox(width: 15),
+  //     ],
+  //   );
+  // }
 
   _validateDate() {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
