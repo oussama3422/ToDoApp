@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo/ui/pages/notification_screen.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -68,7 +69,7 @@ class NotifyHelper {
       task.title!,
       task.note!,
       // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-      _nextInstanceOftenAM(hour, minutes),
+      _nextInstanceOftenAM(hour, minutes,task.remind!,task.repeat!,task.date!),
       const NotificationDetails(
         android: AndroidNotificationDetails(
             'channelId', 'channelName', 'channelDescription'),
@@ -80,16 +81,43 @@ class NotifyHelper {
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
-
   // ::::::::::::::::::;We Make Next Instance Of Ten AM::::::::::::::::
-  tz.TZDateTime _nextInstanceOftenAM(int hour, int minutes) {
+  tz.TZDateTime _nextInstanceOftenAM(int hour, int minutes,int remind,String repeat,String date) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduleDate =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
-    if (scheduleDate.isBefore(now)) {
-      scheduleDate = scheduleDate.add(const Duration(days: 1));
-    }
 
+    scheduleDate = afterRemind(remind, scheduleDate);
+    if (scheduleDate.isBefore(now)) {
+    if(repeat=='Daily'){
+     scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, (DateFormat.yMd().parse(date).day)+1, hour, minutes);
+    }
+    if(repeat=='Weekly'){
+     scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, (DateFormat.yMd().parse(date).day)+7, hour, minutes);
+    }
+    if(repeat=='Monthly'){
+      scheduleDate = tz.TZDateTime(tz.local, now.year, (DateFormat.yMd().parse(date).month)+1, DateFormat.yMd().parse(date).day, hour, minutes);
+    }
+    }
+    
+    scheduleDate = afterRemind(remind, scheduleDate);
+    print('final ScheduleDate :: = $scheduleDate');
+    return scheduleDate;
+  }
+// :::::::::::::::::::::::After Remind Method::::::::::::::::::://
+  tz.TZDateTime afterRemind(int remind, tz.TZDateTime scheduleDate) {
+      if(remind==5){
+      scheduleDate=scheduleDate = scheduleDate.subtract(const Duration(minutes: 5));
+    }
+    if(remind==10){
+      scheduleDate=scheduleDate = scheduleDate.subtract(const Duration(minutes: 10));
+    }
+    if(remind==15){
+      scheduleDate=scheduleDate = scheduleDate.subtract(const Duration(minutes: 15));
+    }
+    if(remind==20){
+      scheduleDate=scheduleDate = scheduleDate.subtract(const Duration(minutes: 20));
+    }
     return scheduleDate;
   }
 

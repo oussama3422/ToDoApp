@@ -1,10 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:todo/models/task.dart';
+// import 'package:todo/services/notification_services.dart';
+
+// import '../../controllers/task_controller.dart';
 
 
 class NoteDelete extends StatelessWidget {
-  const NoteDelete({ Key? key }) : super(key: key);
+   const NoteDelete({ Key? key }) : super(key: key);
+  // var notifyHelper= NotifyHelper() ;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,8 @@ class NoteDelete extends StatelessWidget {
         TextButton(
           onPressed: (){
             Navigator.of(context).pop(false);
+           
+
           },
           child:  Text('No',style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black)),
           ),

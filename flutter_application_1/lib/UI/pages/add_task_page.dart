@@ -72,7 +72,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 const SizedBox(height: 2),
                 InputField(
                   title: 'Date',
-                  hint:DateFormat.yMd().format(_selectedTime),
+                  hint:DateFormat('dd:MM:yyyy').format(_selectedTime),
                   widget: IconButton(
                     icon: const Icon(Icons.calendar_month_sharp),
                     onPressed: () => _getDateFromUser(),
@@ -229,9 +229,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _getTimeFromUser({bool? isStratTime}) async{
        TimeOfDay? _pickedTime = await showTimePicker(
-         initialEntryMode: TimePickerEntryMode.input,
+         initialEntryMode: TimePickerEntryMode.dial,
         context: context,
-        initialTime: isStratTime!? TimeOfDay.fromDateTime(DateTime.now()):TimeOfDay.fromDateTime(DateTime.now().add(const Duration(minutes: 15),),),);
+        initialTime: isStratTime!  ? TimeOfDay.fromDateTime(DateTime.now()):TimeOfDay.fromDateTime(DateTime.now().add(const Duration(minutes: 15),),),);
     if (isStratTime) {
       setState(() {
         _startTime = _pickedTime!.format(context);

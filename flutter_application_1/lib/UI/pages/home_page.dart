@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(DateFormat.yMMMd().format(DateTime.now()),
+              Text(DateFormat.yMMMMEEEEd().format(DateTime.now()),
                   style: subheadingStyle),
               Text(
                 'Today',
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                   debugPrint('My Minutes is ' + minutes);
 
                   var date = DateFormat.jm().parse(task.startTime!);
-                  var myTime = DateFormat('hh:mm a').format(date);
+                  var myTime = DateFormat('HH:mm').format(date);
 
                   notifyhelper.scheduleNotifaction(
                     int.parse(myTime.toString().split(':')[0]),
@@ -228,7 +228,11 @@ class _HomePageState extends State<HomePage> {
                               _taskController.deleteTasks(task);
                             },
                             confirmDismiss: (direction)async {
-                               var result = await showDialog(context: context, builder: (_)=>NoteDelete());
+                               var result = await showDialog(context: context, builder: (_){
+                                 return NoteDelete();
+                               }
+                                 );
+                              notifyhelper.cancelNotification(task);
                                return result;
                             },
                             background: Padding(
@@ -271,25 +275,31 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        SingleChildScrollView(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            direction: SizeConfig.orientation == Orientation.landscape
-                ? Axis.vertical
-                : Axis.horizontal,
-            children: [
-              SizeConfig.orientation == Orientation.landscape ? const SizedBox(height: 6) : SizedBox(height: 200),
-              Image.asset('images/ToDoTask.png', height: 200,color: primaryClr.withOpacity(0.7),),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'You dont have any tasks Yet !!',
-                  style: headingStyle,
-                  textAlign: TextAlign.center,
-                ),
+        AnimatedPositioned(
+          duration: Duration(microseconds: 2000),
+          child: RefreshIndicator(
+            onRefresh: onRefresh,
+            child: SingleChildScrollView(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                direction: SizeConfig.orientation == Orientation.landscape
+                    ? Axis.vertical
+                    : Axis.horizontal,
+                children: [
+                  SizeConfig.orientation == Orientation.landscape ? const SizedBox(height: 6) : SizedBox(height: 200),
+                  Image.asset('images/ToDoTask.png', height: 200,color: primaryClr.withOpacity(0.7),),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'You dont have any tasks Yet !!',
+                      style: headingStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         )
       ],
@@ -304,11 +314,11 @@ class _HomePageState extends State<HomePage> {
         width: SizeConfig.screenWidth,
         height: (SizeConfig.orientation == Orientation.landscape)
             ? (task.isCompleted == 1
-                ? SizeConfig.screenHeight * 0.6
+           ? SizeConfig.screenHeight * 0.6
                 : SizeConfig.screenHeight * 0.8)
             : (task.isCompleted == 1
-                ? SizeConfig.screenHeight * 0.30
-                : SizeConfig.screenHeight * 0.39),
+                ? SizeConfig.screenHeight * 0.14
+                : SizeConfig.screenHeight * 0.22),
         color: Get.isDarkMode ? darkHeaderClr : Colors.white,
         child: Column(
           children: [
@@ -329,6 +339,7 @@ class _HomePageState extends State<HomePage> {
                     label: 'Task Completed',
                     onTap: () {
                       setState(() {
+                        notifyhelper.cancelNotification(task);
                         task.isCompleted = 1;
                       });
                       Get.back();
