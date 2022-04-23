@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:todo/models/task.dart';
 // import 'package:todo/Ui/pages/home_page.dart';
 import 'package:todo/Ui/theme.dart';
@@ -71,7 +72,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 const SizedBox(height: 2),
                 InputField(
                   title: 'Date',
-                  hint: DateFormat('dd/MM/yyy').format(DateTime.now()),
+                  hint:DateFormat.yMd().format(_selectedTime),
                   widget: IconButton(
                     icon: const Icon(Icons.calendar_month_sharp),
                     onPressed: () => _getDateFromUser(),

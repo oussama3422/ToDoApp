@@ -7,6 +7,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/UI/pages/note_delete.dart';
 import 'package:todo/UI/widgets/task_tile.dart';
 import 'package:todo/services/notification_services.dart';
 // import 'package:todo/UI/widgets/task_tile.dart';
@@ -179,14 +180,16 @@ class _HomePageState extends State<HomePage> {
 // :::::::::::::::we check if they TodoList Diallt Or Not::::::::::::::::::::::::::::::
                 // final timeformated=DateFormat.yMd().parse(task.date!);
 
-                // if ((task.repeat == 'Daily' 
-                //         &&
-                //         task.date ==  DateFormat.yMd().format(_selectedTime))
-                //         || 
-                //         (task.repeat=='Weeklly' && _selectedTime.difference(DateFormat.yMd().parse(task.date!)).inDays %7==0) 
-                //         ||
-                //         (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
-                // {
+                if (
+                  (
+                    task.repeat == 'Daily' 
+                    ||
+                    task.date ==  DateFormat.yMd().format(_selectedTime))
+                        || 
+                        (task.repeat =='Weekly' && _selectedTime.difference(DateFormat.yMd().parse(task.date!)).inDays %7==0) 
+                        ||
+                        (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
+                {
                   try{
                   var hours = task.startTime.toString().split(':')[0];
                   var minutes = task.startTime.toString().split(':')[1];
@@ -207,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                   }
                   return AnimationConfiguration.staggeredList(
                     position: index,
-                    duration: const Duration(milliseconds: 1373),
+                    duration: const Duration(milliseconds: 1000),
                     child: SlideAnimation(
                       horizontalOffset: 300,
                       child: FadeInAnimation(
@@ -218,14 +221,41 @@ class _HomePageState extends State<HomePage> {
                               task,
                             );
                           },
-                          child: TaskTile(task),
+                          child: Dismissible(
+                            key:ValueKey(_taskController.taskList[index].id),
+                            direction: DismissDirection.startToEnd,
+                            onDismissed: (direction){
+                              _taskController.deleteTasks(task);
+                            },
+                            confirmDismiss: (direction)async {
+                               var result = await showDialog(context: context, builder: (_)=>NoteDelete());
+                               return result;
+                            },
+                            background: Padding(
+                              padding: const EdgeInsets.only(top:10,bottom: 10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.red,
+                                ),
+                                child: Row(
+                                  children:const [
+                                    Text('Delete'),
+                                    Icon(Icons.delete,size: 30)
+                                    ],
+                                    ),
+                                ),
+                            ),
+                            child: TaskTile(task)
+                            
+                            ),
                         ),
                       ),
                     ),
                   );
-                // }  else {
-                //   return Container();
-                // }
+                }  else {
+                  return Container();
+                }
               },
               itemCount: _taskController.taskList.length,
             ),
@@ -242,27 +272,24 @@ class _HomePageState extends State<HomePage> {
       alignment: Alignment.center,
       children: [
         SingleChildScrollView(
-          child: RefreshIndicator(
-            onRefresh: onRefresh,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              direction: SizeConfig.orientation == Orientation.landscape
-                  ? Axis.vertical
-                  : Axis.horizontal,
-              children: [
-                SizeConfig.orientation == Orientation.landscape ? const SizedBox(height: 6) : SizedBox(height: 200),
-                Image.asset('images/ToDoTask.png', height: 200,color: primaryClr.withOpacity(0.7),),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'You dont have any tasks Yet !!',
-                    style: headingStyle,
-                    textAlign: TextAlign.center,
-                  ),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            direction: SizeConfig.orientation == Orientation.landscape
+                ? Axis.vertical
+                : Axis.horizontal,
+            children: [
+              SizeConfig.orientation == Orientation.landscape ? const SizedBox(height: 6) : SizedBox(height: 200),
+              Image.asset('images/ToDoTask.png', height: 200,color: primaryClr.withOpacity(0.7),),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'You dont have any tasks Yet !!',
+                  style: headingStyle,
+                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         )
       ],
@@ -295,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+         
             task.isCompleted == 1
                 ? Container()
                 : _buildBottomSheet(
@@ -308,15 +335,6 @@ class _HomePageState extends State<HomePage> {
                     },
                     color: Colors.green,
                   ),
-            _buildBottomSheet(
-              label: 'Delete Task',
-              onTap: () {
-                notifyhelper.cancelNotification(task);
-                _taskController.deleteTasks(task);
-                Get.back();
-              },
-              color: Colors.red,
-            ),
             Divider(color: Colors.orange),
             _buildBottomSheet(
               label: 'Cancel',
@@ -340,7 +358,7 @@ class _HomePageState extends State<HomePage> {
         onTap: onTap,
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 4),
-          height: 65,
+          height: 50,
           width: SizeConfig.screenWidth! * 0.9,
           decoration: BoxDecoration(
             border: Border.all(

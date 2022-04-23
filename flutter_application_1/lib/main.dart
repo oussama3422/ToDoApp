@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:todo/UI/theme.dart';
-import 'package:todo/controllers/task_controller.dart';
+// import 'package:todo/controllers/task_controller.dart';
 import 'package:todo/db/db_helper.dart';
 import 'package:todo/services/theme_services.dart';
-import 'UI/pages/home_page.dart';
+import 'package:todo/views/on_boarding_pages.dart';
+// import 'UI/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeServices().theme,
       title: 'To Do App',
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: OnBoardingPage(),
     );
   }
 }
