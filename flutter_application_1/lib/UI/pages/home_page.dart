@@ -191,11 +191,10 @@ class _HomePageState extends State<HomePage> {
                         (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
                 {
                   try{
-                  var hours = task.startTime.toString().split(':')[0];
-                  var minutes = task.startTime.toString().split(':')[1];
+                  // var hours = task.startTime.toString().split(':')[0];
+                  // var minutes = task.startTime.toString().split(':')[1];
 
-                  debugPrint('My time is ' + hours);
-                  debugPrint('My Minutes is ' + minutes);
+                 
 
                   var date = DateFormat.jm().parse(task.startTime!);
                   var myTime = DateFormat('HH:mm').format(date);
@@ -206,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                     _taskController.taskList[index],
                   );
                   }catch(e){
-                    print(e);
+                    print('The Error Is :::> $e');
                   }
                   return AnimationConfiguration.staggeredList(
                     position: index,

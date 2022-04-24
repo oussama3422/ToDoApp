@@ -84,19 +84,22 @@ class NotifyHelper {
   // ::::::::::::::::::;We Make Next Instance Of Ten AM::::::::::::::::
   tz.TZDateTime _nextInstanceOftenAM(int hour, int minutes,int remind,String repeat,String date) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduleDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
+    tz.TZDateTime scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
 
+     var formateddate =DateFormat.yMd().parse(date);
+     final tz.TZDateTime formateddate2 = tz.TZDateTime.from(formateddate,tz.local);
+   
     scheduleDate = afterRemind(remind, scheduleDate);
+
     if (scheduleDate.isBefore(now)) {
     if(repeat=='Daily'){
-     scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, (DateFormat.yMd().parse(date).day)+1, hour, minutes);
+     scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, (formateddate.day)+1, hour, minutes);
     }
     if(repeat=='Weekly'){
-     scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, (DateFormat.yMd().parse(date).day)+7, hour, minutes);
+     scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, (formateddate.day)+7, hour, minutes);
     }
     if(repeat=='Monthly'){
-      scheduleDate = tz.TZDateTime(tz.local, now.year, (DateFormat.yMd().parse(date).month)+1, DateFormat.yMd().parse(date).day, hour, minutes);
+      scheduleDate = tz.TZDateTime(tz.local, now.year, (formateddate.month)+1,formateddate.day, hour, minutes);
     }
     }
     
@@ -121,6 +124,8 @@ class NotifyHelper {
     return scheduleDate;
   }
 
+
+// :::::::::::::::::::::::::This Method Show to Big Notifiction::::::::::::::::::::::::
   Future<void> showBigPictureNotification() async {
     var bigPictureStyleInformation = const BigPictureStyleInformation(
         DrawableResourceAndroidBitmap('mypic'),
@@ -141,8 +146,12 @@ class NotifyHelper {
         payload: 'big image notifications');
   }
 
-// ::::::::::Cancel Notification Remove The Notification of the given Id
+// ::::::::::Cancel Notification Method Remove The Notification of Id the given :::::::::::
   Future<void> cancelNotification(Task tsk) async {
     await flutterLocalNotificationsPlugin.cancel(tsk.id!);
+  }
+// ::::::::::Cancel All Notification Method ::::::::::::::::::://
+  Future<void> cancelALLNotification() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
   }
 }

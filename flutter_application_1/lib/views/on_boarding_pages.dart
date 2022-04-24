@@ -59,7 +59,7 @@ class OnBoardingPage extends StatelessWidget {
               right: 20,
               top: 20,
               child: FloatingActionButton(
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.blue,
                 onPressed: contoller.forwardAction,
                 child:Obx(() => Text(
                   contoller.isLastPage
