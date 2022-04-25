@@ -26,7 +26,7 @@ class NotifyHelper {
     //   debugPrint('Notifaction Payload : $payload');
     // }
 
-    await Get.to(NotificationScreen(payload: payload));
+    await Get.to(()=>NotificationScreen(payload: payload));
   }
 
   // schedule Notification — used to perform a scheduled task and implemented notification occurs at a specific time.
@@ -64,6 +64,7 @@ class NotifyHelper {
   }
 
   scheduleNotifaction(int hour, int minutes, Task task) async {
+
     await flutterLocalNotificationsPlugin.zonedSchedule(
       task.id!,
       task.title!,
@@ -75,6 +76,7 @@ class NotifyHelper {
             'channelId', 'channelName', 'channelDescription'),
       ),
       androidAllowWhileIdle: true,
+      
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: '${task.title};${task.note};${task.startTime}',
@@ -148,6 +150,10 @@ class NotifyHelper {
 
 // ::::::::::Cancel Notification Method Remove The Notification of Id the given :::::::::::
   Future<void> cancelNotification(Task tsk) async {
+
+
+
+
     await flutterLocalNotificationsPlugin.cancel(tsk.id!);
   }
 // ::::::::::Cancel All Notification Method ::::::::::::::::::://

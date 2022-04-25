@@ -17,7 +17,7 @@ class OnBoardingContoller extends GetxController {
     forwardAction(){
       if(isLastPage)
       {
-        Get.to(const HomePage());
+        Get.to(()=>const HomePage());
     }else{
       pageController.nextPage(duration: 300.milliseconds, curve: Curves.easeIn);
     }

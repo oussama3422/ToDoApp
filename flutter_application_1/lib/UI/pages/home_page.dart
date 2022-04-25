@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.add_task_sharp,color: Get.isDarkMode?Colors.grey:Colors.white),
               label: 'Add Task',
               onPressed: () async {
-                await Get.to(AddTaskPage());
+                await Get.to(()=>AddTaskPage());
                 _taskController.getTasks();
               }
               ),
@@ -197,15 +197,15 @@ class _HomePageState extends State<HomePage> {
                  
 
                   var date = DateFormat.jm().parse(task.startTime!);
-                  var myTime = DateFormat('HH:mm').format(date);
+                  var myTime = DateFormat('hh:mm a').format(date);
 
                   notifyhelper.scheduleNotifaction(
-                    int.parse(myTime.toString().split(':')[0]),
-                    int.parse(myTime.toString().split(':')[0]),
+                    int.parse(myTime.split(':')[0]),
+                    int.parse(myTime.split(':')[1]),
                     _taskController.taskList[index],
                   );
                   }catch(e){
-                    print('The Error Is :::> $e');
+                    print('The Error Is :::::::>   $e');
                   }
                   return AnimationConfiguration.staggeredList(
                     position: index,
