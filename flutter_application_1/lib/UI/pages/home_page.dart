@@ -188,25 +188,27 @@ class _HomePageState extends State<HomePage> {
                         || 
                         (task.repeat =='Weekly' && _selectedTime.difference(DateFormat.yMd().parse(task.date!)).inDays %7==0) 
                         ||
-                        (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  ))
+                        (task.repeat=='Monthly' && DateFormat.yMd().parse(task.date!).day == _selectedTime.day  )
+                        )
                 {
-                  try{
+                
                   // var hours = task.startTime.toString().split(':')[0];
-                  // var minutes = task.startTime.toString().split(':')[1];
+                  // var minutes = task.startTime.toString().split(':')[0];
 
-                 
+                 try{
 
-                  var date = DateFormat.jm().parse(task.startTime!);
-                  var myTime = DateFormat('hh:mm a').format(date);
+                  // var date = DateFormat.jm().parse(task.startTime!);
+                  // var myTime = DateFormat('KK:mm').format(date);
 
                   notifyhelper.scheduleNotifaction(
-                    int.parse(myTime.split(':')[0]),
-                    int.parse(myTime.split(':')[1]),
+                     int.parse( task.startTime.toString().split(':')[0]),
+                     int.parse(task.startTime.toString().split(':')[1]),
+                    // int.parse(myTime.toString().split(':')[0]),
+                    // int.parse(myTime.toString().split(':')[0]),
                     _taskController.taskList[index],
                   );
-                  }catch(e){
-                    print('The Error Is :::::::>   $e');
-                  }
+                 }catch(e){print('Warning : $e');}
+                  
                   return AnimationConfiguration.staggeredList(
                     position: index,
                     duration: const Duration(milliseconds: 1000),

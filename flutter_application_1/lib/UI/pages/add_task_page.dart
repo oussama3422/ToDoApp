@@ -24,8 +24,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _noteController = TextEditingController();
 
   DateTime _selectedTime = DateTime.now();
-  String _startTime = DateFormat('hh:mm a').format(DateTime.now());
-  String _endTime = DateFormat('hh:mm a').format(DateTime.now().add(const Duration(minutes: 10)));
+  String _startTime = DateFormat('KK:mm ').format(DateTime.now()).toString();
+  String _endTime = DateFormat('KK:mm ').format(DateTime.now().add(const Duration(minutes: 10))).toString();
 
   int _selectedRemind = 5;
   var remindList = [5, 10, 15, 20];
@@ -157,7 +157,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         icon:  Icon(Icons.add_task_sharp,color: Get.isDarkMode?Colors.grey:Colors.white,),
                         label: 'Add Task',
                         onPressed: () =>_validateDate(),
-                      
                         ),
                   ],
                 ),

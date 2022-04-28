@@ -86,11 +86,11 @@ class NotifyHelper {
   // ::::::::::::::::::;We Make Next Instance Of Ten AM::::::::::::::::
   tz.TZDateTime _nextInstanceOftenAM(int hour, int minutes,int remind,String repeat,String date) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
-
+    print('Now = $now');
      var formateddate =DateFormat.yMd().parse(date);
      final tz.TZDateTime formateddate2 = tz.TZDateTime.from(formateddate,tz.local);
-   
+    tz.TZDateTime scheduleDate = tz.TZDateTime(tz.local, formateddate2.year, formateddate2.month, formateddate2.day, hour, minutes);
+    print('Choosen Date : $scheduleDate');
     scheduleDate = afterRemind(remind, scheduleDate);
 
     if (scheduleDate.isBefore(now)) {
@@ -103,10 +103,11 @@ class NotifyHelper {
     if(repeat=='Monthly'){
       scheduleDate = tz.TZDateTime(tz.local, now.year, (formateddate.month)+1,formateddate.day, hour, minutes);
     }
+    scheduleDate = afterRemind(remind, scheduleDate);
     }
     
-    scheduleDate = afterRemind(remind, scheduleDate);
-    print('final ScheduleDate :: = $scheduleDate');
+   
+    print('Next ScheduleDate  = $scheduleDate');
     return scheduleDate;
   }
 // :::::::::::::::::::::::After Remind Method::::::::::::::::::://
@@ -125,7 +126,6 @@ class NotifyHelper {
     }
     return scheduleDate;
   }
-
 
 // :::::::::::::::::::::::::This Method Show to Big Notifiction::::::::::::::::::::::::
   Future<void> showBigPictureNotification() async {

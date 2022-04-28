@@ -7,11 +7,13 @@ import 'package:todo/db/db_helper.dart';
 import 'package:todo/services/theme_services.dart';
 import 'package:todo/views/on_boarding_pages.dart';
 // import 'UI/pages/home_page.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initDb();
   await GetStorage.init();
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 
